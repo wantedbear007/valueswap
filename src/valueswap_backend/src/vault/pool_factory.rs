@@ -15,7 +15,7 @@ use ic_cdk::{
 use crate::utils::types::*;
 use crate::logic::deposit::*;
 use crate::api::transfer::*;
-use crate::api::deposit::deposit_ckbtc;
+// use crate::api::deposit::deposit_ckbtc;
 
 thread_local! {
     pub static TOKEN_POOLS: RefCell<HashMap<String, Principal>> = RefCell::new(HashMap::new());
@@ -33,9 +33,9 @@ fn prevent_anonymous() -> Result<(), String> {
 #[update(guard = prevent_anonymous)]
 async fn create_pools(params: CreatePoolParams) -> Result<(), String> {
     let principal_id = api::caller();
-    if principal_id == Principal::anonymous() {
-        return Err("Anonymous principal not allowed to make calls".to_string());
-    }
+    // if principal_id == Principal::anonymous() {
+    //     return Err("Anonymous principal not allowed to make calls".to_string());
+    // }
 
     let pool_name = params.token_names.join("");
 
@@ -49,16 +49,18 @@ async fn create_pools(params: CreatePoolParams) -> Result<(), String> {
     });
 
     if let Some(canister_id) = pool_canister_id {
-        deposit_ckbtc(2000).await?;
+        ic_cdk::println!("deposit wle me hain");
+        // deposit_ckbtc(2000).await?;
         Ok(())
     } else {
+        ic_cdk::println!("aab create canister me hu");
         match create_canister(CreateCanisterArgument {settings: None}).await {
             Ok((canister_id_record,)) => {
                 let canister_id = canister_id_record.canister_id;
                 TOKEN_POOLS.with(|pool| {
                     pool.borrow_mut().insert(pool_name, canister_id);
                 });
-                deposit_ckbtc(2000).await?;
+                // deposit_ckbtc(2000).await?;
                 Ok(())
             },
             Err((_, err_string)) => Err(format!("Error creating canister: {}", err_string)),
@@ -157,7 +159,7 @@ async fn deposit_cycles(arg: CanisterIdRecord, cycles: u128) -> CallResult<()> {
 
 async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
     let wasm_module_sample: Vec<u8> =
-        include_bytes!("/Users/admin/Desktop/qb/valueswap/.dfx/local/canisters/swap/swap.wasm").to_vec();
+        include_bytes!("../../../../.dfx/local/canisters/swap/swap.wasm").to_vec();
 
     let extended_arg = InstallCodeArgumentExtended {
         mode: arg.mode,

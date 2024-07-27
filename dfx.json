@@ -10,6 +10,13 @@
         }
       }
     },
+    "icrc1_ledger_canister": {
+      "type": "custom",
+      "candid": "https://raw.githubusercontent.com/dfinity/ic/0d2b3965c813cd3a39ceedacd97fa2eee8760074/rs/rosetta-api/icrc1/ledger/ledger.did",
+      "wasm": "https://download.dfinity.systems/ic/0d2b3965c813cd3a39ceedacd97fa2eee8760074/canisters/ic-icrc1-ledger.wasm.gz",
+      "specified_id": "mxzaz-hqaaa-aaaar-qaada-cai"
+
+    },
     "internet_identity" : {
       "type": "pull",
       "id": "rdmx6-jaaaa-aaaaa-aaadq-cai"
